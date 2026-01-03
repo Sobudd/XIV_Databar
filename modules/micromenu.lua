@@ -101,7 +101,7 @@ end
 -- Make sure to disable "Tooltip" in the Skins section of ElvUI together with
 -- unchecking "Use ElvUI for tooltips" in XIV options to not have ElvUI fuck with tooltips
 function MenuModule:SkinFrame(frame, name)
-  if xb.db.profile.general.useElvUI and (IsAddOnLoaded('ElvUI') or IsAddOnLoaded('Tukui')) then
+  if xb.db.profile.general.useElvUI and (C_AddOns.IsAddOnLoaded('ElvUI') or C_AddOns.IsAddOnLoaded('Tukui')) then
     if frame.StripTextures then
       frame:StripTextures()
     end

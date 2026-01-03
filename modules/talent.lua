@@ -50,7 +50,7 @@ function TalentModule:OnInitialize()
   self.specButtons = {}
   self.lootSpecButtons = {}
   self.classIcon = xb.constants.mediaPath..'spec\\'..xb.constants.playerClass
-  self.useElvUI = xb.db.profile.general.useElvUI and (IsAddOnLoaded('ElvUI') or IsAddOnLoaded('Tukui'))
+  self.useElvUI = xb.db.profile.general.useElvUI and (C_AddOns.IsAddOnLoaded('ElvUI') or C_AddOns.IsAddOnLoaded('Tukui'))
 end
 
 function TalentModule:OnEnable()

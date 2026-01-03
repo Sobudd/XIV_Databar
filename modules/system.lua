@@ -246,14 +246,14 @@ function SystemModule:RegisterFrameEvents()
 end
 
 function SystemModule:ShowTooltip()
-  local totalAddons = GetNumAddOns()
+  local totalAddons = C_AddOns.GetNumAddOns()
   local totalUsage = 0
   local memTable = {}
 
   UpdateAddOnMemoryUsage()
 
   for i = 1, totalAddons do
-    local _, aoName, _ = GetAddOnInfo(i)
+    local _, aoName, _ = C_AddOns.GetAddOnInfo(i)
     local mem = GetAddOnMemoryUsage(i)
     table.insert(memTable, {memory = mem, name = aoName})
   end

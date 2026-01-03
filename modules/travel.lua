@@ -220,26 +220,6 @@ function TravelModule:UpdatePortOptions()
     end
     self.portOptions[193759] = {portId = 193759, text = portText}
   end
-
-  -- Include any hearthstones/toys listed in self.hearthstones as port options
-  if self.hearthstones then
-    for _, id in ipairs(self.hearthstones) do
-      if not self.portOptions[id] then
-        if PlayerHasToy(id) or IsUsableItem(id) or IsPlayerSpell(id) then
-          local name = nil
-          if PlayerHasToy(id) or IsUsableItem(id) then
-            name = GetItemInfo(id)
-          end
-          if not name and IsPlayerSpell(id) then
-            name = GetSpellInfo(id)
-          end
-          if name then
-            self.portOptions[id] = {portId = id, text = name}
-          end
-        end
-      end
-    end
-  end
 end
 
 function TravelModule:FormatCooldown(cdTime)
@@ -363,7 +343,7 @@ function TravelModule:CreatePortPopup()
   local changedWidth = false
   for i, v in pairs(self.portOptions) do
     if self.portButtons[v.portId] == nil then
-      if PlayerHasToy(v.portId) or IsUsableItem(v.portId) or IsPlayerSpell(v.portId) then
+      if IsUsableItem(v.portId) or IsPlayerSpell(v.portId) then
         local button = CreateFrame('BUTTON', nil, self.portPopup)
         local buttonText = button:CreateFontString(nil, 'OVERLAY')
 
@@ -515,8 +495,8 @@ function TravelModule:ShowTooltip()
     local r, g, b, _ = unpack(xb:HoverColors())
     GameTooltip:AddLine("|cFFFFFFFF[|r"..L['Travel Cooldowns'].."|cFFFFFFFF]|r", r, g, b)
     for i, v in pairs(self.portOptions) do
-      if PlayerHasToy(v.portId) or IsUsableItem(v.portId) or IsPlayerSpell(v.portId) then
-        if PlayerHasToy(v.portId) or IsUsableItem(v.portId) then
+      if IsUsableItem(v.portId) or IsPlayerSpell(v.portId) then
+        if IsUsableItem(v.portId) then
           local _, cd, _ = GetItemCooldown(v.portId)
           local cdString = self:FormatCooldown(cd)
           GameTooltip:AddDoubleLine(v.text, cdString, r, g, b, 1, 1, 1)
@@ -548,7 +528,7 @@ function TravelModule:FindFirstOption()
 end
 
 function TravelModule:IsUsable(id)
-  return PlayerHasToy(id) or IsUsableItem(id) or IsPlayerSpell(id)
+  return IsUsableItem(id) or IsPlayerSpell(id)
 end
 
 function TravelModule:GetDefaultOptions()

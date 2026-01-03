@@ -6,13 +6,11 @@
 ## Author: @project-author@
 ## Version: @project-version@
 
-## Notes: Adds a databar by the request of |cffffffffu/sammojo|r on Reddit, Icons made by |cffffffffu/sammojo|r. Previously maintained by |cff00FF99Saxitoxin|r, |cffbbbbbbMille|r|cff990000XIV|r, |c03dbfcbbVicious|r, and now |cffbab86cKozoaku|r.
+## Notes: Adds a databar by the request of |cffffffffu/sammojo|r on Reddit, Icons made by |cffffffffu/sammojo|r. Previously maintained by |cff00FF99Saxitoxin|r, |cffbbbbbbMille|r|cff990000XIV|r, |c03dbfcbbVicious|r, |cffbab86cKozoaku|r, and now |cffa330c9Nessoris|r.
 ## SavedVariables: TEST_CONFIG, XIVBarDB
 
 ## X-Website: https://github.com/@project-author@/XIV_Databar
 ## X-Issues: https://github.com/@project-author@/XIV_Databar/issues
-
-## X-Wago-ID: VBNBX0Kx
 
 embeds.xml
 

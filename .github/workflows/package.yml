@@ -53,6 +53,42 @@ jobs:
             }
           }
 
+      - name: Clean Git metadata from staging
+        shell: pwsh
+        run: |
+          Write-Host "Removing .git directories and repo files from staging"
+          $staging = Join-Path $env:GITHUB_WORKSPACE 'package'
+          # remove .git folders
+          Get-ChildItem -Path $staging -Force -Recurse -Directory -Filter '.git' -ErrorAction SilentlyContinue | ForEach-Object {
+            Remove-Item -Path $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+          }
+          # remove common repo files and editor/OS cruft
+          $repoFiles = @(
+            '.gitignore', '.gitattributes', '.gitmodules', '.pkgmeta', '.releaserc',
+            'package.json', 'package-lock.json', 'CHANGELOG.md', 'README.md', '.editorconfig'
+          )
+          foreach ($f in $repoFiles) {
+            Get-ChildItem -Path $staging -Force -Recurse -File -Filter $f -ErrorAction SilentlyContinue | ForEach-Object {
+              Remove-Item -Path $_.FullName -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+          # remove common OS/editor temp files
+          $tempPatterns = @('*.DS_Store','Thumbs.db','*.swp','*~')
+          foreach ($p in $tempPatterns) {
+            Get-ChildItem -Path $staging -Force -Recurse -File -Include $p -ErrorAction SilentlyContinue | ForEach-Object {
+              Remove-Item -Path $_.FullName -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+          # remove development docs/tests folders if present
+          $devDirs = @('tests','spec','docs')
+          foreach ($d in $devDirs) {
+            Get-ChildItem -Path $staging -Force -Recurse -Directory -Filter $d -ErrorAction SilentlyContinue | ForEach-Object {
+              Remove-Item -Path $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+            }
+          }
+
       - name: Create ZIP package from staging
         shell: pwsh
         run: |

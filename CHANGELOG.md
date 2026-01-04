@@ -1,4 +1,4 @@
-# 1.2
+# [1.2] 04/01/24
 ## Github flow working, cleaned up unnecessary files from package
 
 # 1.0.0 (2026-01-04)

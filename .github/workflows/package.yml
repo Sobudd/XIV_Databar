@@ -38,7 +38,7 @@ jobs:
           if (Test-Path $staging) { Remove-Item $staging -Recurse -Force }
           New-Item -ItemType Directory -Path $staging | Out-Null
 
-          $excludes = @('.git', '.github', 'node_modules', '.vscode', 'scripts', 'package.json', 'package-lock.json', '.pkgmeta')
+          $excludes = @('.git', '.github', 'node_modules', '.vscode', 'scripts', 'package.json', 'package-lock.json', '.pkgmeta', 'package')
 
           Get-ChildItem -Path $env:GITHUB_WORKSPACE -Force | Where-Object {
             $name = $_.Name

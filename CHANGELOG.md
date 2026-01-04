@@ -1,3 +1,7 @@
+## [1.1] 04/01/26
+
+### Created packaging setup, and sorted libraries.
+
 ## [3.1.2](https://github.com/Kozoaku/XIV_Databar/compare/v3.1.1...v3.1.2) (2023-07-28)
 
 

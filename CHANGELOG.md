@@ -1,3 +1,6 @@
+## [3.2.2] 04/01/24
+Fixed LibDataBroker folder naming convention
+
 ## [3.2.1] 04/01/24
 Fixed addon root folder packaging.
 

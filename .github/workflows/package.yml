@@ -12,6 +12,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Ensure Subversion (svn) is installed
+        shell: pwsh
+        run: |
+          Write-Host "Checking for svn..."
+          if (-not (Get-Command svn -ErrorAction SilentlyContinue)) {
+            Write-Host "svn not found — installing subversion via Chocolatey"
+            choco install subversion -y
+          } else {
+            Write-Host "svn found"
+          }
+          svn --version
+
       - name: Run update-libs script
         shell: pwsh
         run: |

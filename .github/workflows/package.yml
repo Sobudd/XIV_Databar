@@ -18,7 +18,7 @@ jobs:
           Write-Host "Checking for svn..."
           if (-not (Get-Command svn -ErrorAction SilentlyContinue)) {
             Write-Host "svn not found — installing subversion via Chocolatey"
-            choco install subversion -y
+              choco install sliksvn -y
           } else {
             Write-Host "svn found"
           }

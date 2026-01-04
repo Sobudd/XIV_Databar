@@ -1,9 +1,5 @@
-# [1.2] 04/01/24
-## Github flow working, cleaned up unnecessary files from package
-
-# 1.0.0 (2026-01-04)
-
-
+## [3.2.0] 04/01/24
+### Github flow working, cleaned up unnecessary files from package
 ### Bug Fixes
 
 * **TOC:** bump TOC ([#67](https://github.com/Sobudd/XIV_Databar/issues/67)) ([a5a4428](https://github.com/Sobudd/XIV_Databar/commit/a5a44281a7365893eb8985a4e5a655cdb09e3705))
@@ -21,10 +17,6 @@
 * Revert "build: change alpha and beta to run on tags since that is all the BW Packager picks up" ([5e357b9](https://github.com/Sobudd/XIV_Databar/commit/5e357b91150070d0119372e801bfb97fc418089b))
 * Revert "build: change alpha and beta to run on tags since that is all the BW Packager picks up" ([a132750](https://github.com/Sobudd/XIV_Databar/commit/a132750e3203b274552fdab25349a52dc61e17ed))
 * Revert "Update alpha.yml" ([096e57c](https://github.com/Sobudd/XIV_Databar/commit/096e57cec5104d311fd8c546f1f333ed3d3f8031))
-
-## [1.1] 04/01/26
-
-### Created packaging setup, and sorted libraries.
 
 ## [3.1.2](https://github.com/Kozoaku/XIV_Databar/compare/v3.1.1...v3.1.2) (2023-07-28)
 

@@ -1,0 +1,91 @@
+name: Package Addon
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run update-libs script
+        shell: pwsh
+        run: |
+          Set-StrictMode -Off
+          Write-Host "Running update-libs.ps1"
+          .\scripts\update-libs.ps1
+
+      - name: Prepare package contents (exclude repo/CI files)
+        shell: pwsh
+        run: |
+          $staging = Join-Path $env:GITHUB_WORKSPACE 'package'
+          if (Test-Path $staging) { Remove-Item $staging -Recurse -Force }
+          New-Item -ItemType Directory -Path $staging | Out-Null
+
+          $excludes = @('.git', '.github', 'node_modules', '.vscode', 'scripts', 'package.json', 'package-lock.json', '.pkgmeta')
+
+          Get-ChildItem -Path $env:GITHUB_WORKSPACE -Force | Where-Object {
+            $name = $_.Name
+            -not ($excludes -contains $name)
+          } | ForEach-Object {
+            $src = $_.FullName
+            $dest = Join-Path $staging $_.Name
+            if ($_.PSIsContainer) {
+              Copy-Item -Path $src -Destination $dest -Recurse -Force -ErrorAction SilentlyContinue
+            } else {
+              Copy-Item -Path $src -Destination $dest -Force -ErrorAction SilentlyContinue
+            }
+          }
+
+      - name: Create ZIP package from staging
+        shell: pwsh
+        run: |
+          $zip = 'XIV_Databar.zip'
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+          Compress-Archive -Path .\package\* -DestinationPath $zip -Force
+          Write-Host "Created $zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: XIV_Databar
+          path: XIV_Databar.zip
+
+      - name: Get version
+        id: get_version
+        shell: pwsh
+        run: |
+          $content = Get-Content CHANGELOG.md -Raw -ErrorAction SilentlyContinue
+          if ($null -ne $content -and $content -match '## \[([0-9A-Za-z\-.]+)\]') {
+            $v = $matches[1]
+          } else {
+            $v = "ci-${{ github.run_number }}"
+          }
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "version=$v"
+
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: XIV_Databar-${{ steps.get_version.outputs.version }}
+          release_name: XIV_Databar-${{ steps.get_version.outputs.version }}
+          body: "Automated build - packaged addon"
+          draft: false
+          prerelease: false
+
+      - name: Upload ZIP to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: XIV_Databar.zip
+          asset_name: XIV_Databar.zip
+          asset_content_type: application/zip

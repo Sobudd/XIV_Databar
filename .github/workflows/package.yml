@@ -94,7 +94,15 @@ jobs:
         run: |
           $zip = 'XIV_Databar.zip'
           if (Test-Path $zip) { Remove-Item $zip -Force }
-          Compress-Archive -Path .\package\* -DestinationPath $zip -Force
+          $staging = Join-Path $env:GITHUB_WORKSPACE 'package'
+          $rootFolderName = 'XIV_Databar'
+          $root = Join-Path $staging $rootFolderName
+          if (Test-Path $root) { Remove-Item $root -Recurse -Force }
+          New-Item -ItemType Directory -Path $root | Out-Null
+          Get-ChildItem -Path $staging -Force | Where-Object { $_.Name -ne $rootFolderName } | ForEach-Object {
+            Move-Item -Path $_.FullName -Destination $root -Force -ErrorAction SilentlyContinue
+          }
+          Compress-Archive -Path $root -DestinationPath $zip -Force
           Write-Host "Created $zip"
 
       - name: Upload artifact

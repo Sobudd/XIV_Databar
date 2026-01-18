@@ -1,3 +1,6 @@
+## [3.2.2] 18/01/24
+Fixing travel.lua error
+
 ## [3.2.2] 04/01/24
 Fixed LibDataBroker folder naming convention
 

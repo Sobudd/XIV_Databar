@@ -3,6 +3,12 @@ local _G = _G;
 local xb = XIVBar;
 local L = XIVBar.L;
 
+-- Compatibility: some WoW environments move spell APIs under C_Spell.
+local GetSpellCooldown = _G.GetSpellCooldown or (C_Spell and C_Spell.GetSpellCooldown)
+if not GetSpellCooldown then
+  GetSpellCooldown = function() return 0, 0, 0 end
+end
+
 local TravelModule = xb:NewModule("TravelModule", 'AceEvent-3.0')
 
 function TravelModule:GetName()

@@ -1,3 +1,6 @@
+## [3.2.4] 01/02/24
+Updated for Midnight!
+
 ## [3.2.3] 18/01/24
 Fixing travel.lua error
 

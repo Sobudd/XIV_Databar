@@ -1,10 +1,9 @@
-## Interface: 100105
-## Interface-Wrath: 30402
-## Interface-Classic: 11403
+## Interface: 120000
+## X-Min-Interface: 120000
 
 ## Title: XIV_Databar
 ## Author: @project-author@
-## Version: @project-version@
+## Version: 3.2.3
 
 ## Notes: Adds a databar by the request of |cffffffffu/sammojo|r on Reddit, Icons made by |cffffffffu/sammojo|r. Previously maintained by |cff00FF99Saxitoxin|r, |cffbbbbbbMille|r|cff990000XIV|r, |c03dbfcbbVicious|r, |cffbab86cKozoaku|r, and now |cffa330c9Nessoris|r.
 ## SavedVariables: TEST_CONFIG, XIVBarDB

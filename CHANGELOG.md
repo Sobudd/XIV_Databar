@@ -1,3 +1,6 @@
+## [3.2.5] 01/03/26
+Removed the port options in favour of the personal key to the Arcantina toy.
+
 ## [3.2.4] 01/02/24
 Updated for Midnight!
 

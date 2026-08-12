@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.2.8] 12/08/26
+
+- feat: implement automated changelog update script and refactor release workflow
+
 ## [3.2.7] 12/08/26
 
 - fix: update permissions and improve tag check logic in package workflow

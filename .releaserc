@@ -10,6 +10,10 @@
       "@semantic-release/commit-analyzer",
       {
         "preset": "angular",
+        "parserOpts": {
+          "headerPattern": "^(.+)$",
+          "headerCorrespondence": ["type"]
+        },
         "releaseRules": [
           { "type": "feat", "release": "minor" },
           { "type": "fix", "release": "patch" },

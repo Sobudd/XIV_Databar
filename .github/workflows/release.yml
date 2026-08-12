@@ -68,16 +68,12 @@ jobs:
           fi
 
       - name: Build release notes
-        id: notes
         run: |
           if [ -n "${{ steps.version.outputs.latest_tag }}" ]; then
             git log --pretty=format:'- %s' "${{ steps.version.outputs.latest_tag }}"..HEAD > release-notes.txt
           else
             git log --pretty=format:'- %s' HEAD > release-notes.txt
           fi
-          echo "notes<<EOF" >> $GITHUB_OUTPUT
-          cat release-notes.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Update CHANGELOG.md
         run: |

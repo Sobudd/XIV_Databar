@@ -136,8 +136,28 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value $body
           Add-Content -Path $env:GITHUB_OUTPUT -Value "EOF"
 
+      - name: Check if current release tag exists
+        id: check_tag
+        shell: pwsh
+        run: |
+          git fetch --tags
+          $content = Get-Content CHANGELOG.md -Raw -ErrorAction SilentlyContinue
+          if ($content -match '## \[([0-9A-Za-z\-.]+)\]') {
+            $version = $matches[1]
+          } else {
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "skip=true"
+            exit 0
+          }
+          $tag = "XIV_Databar-$version"
+          if (git rev-parse --verify --quiet "refs/tags/$tag") {
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "skip=true"
+          } else {
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "skip=false"
+          }
+
       - name: Create GitHub Release
         id: create_release
+        if: steps.check_tag.outputs.skip == 'false'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -149,6 +169,7 @@ jobs:
           prerelease: false
 
       - name: Upload ZIP to Release
+        if: steps.check_tag.outputs.skip == 'false'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

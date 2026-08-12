@@ -21,6 +21,7 @@ jobs:
         uses: nebularg/actions-luacheck@v1
 
   release:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
@@ -29,17 +30,74 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*"
-      - name: Install Semantic Release
+
+      - name: Configure Git user
         run: |
-          npm install semantic-release @semantic-release/git @semantic-release/changelog conventional-changelog-conventionalcommits -D
-      - name: Create new version
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Determine latest tag and next version
+        id: version
+        run: |
+          git fetch --tags
+          latest_tag=$(git tag --list 'XIV_Databar-*' --sort=-v:refname | head -n 1)
+          if [ -n "$latest_tag" ]; then
+            current_version=${latest_tag#XIV_Databar-}
+          else
+            current_version="3.2.6"
+          fi
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          IFS='.' read -r major minor patch <<< "$current_version"
+          patch=$((patch + 1))
+          next_version="$major.$minor.$patch"
+          echo "version=$next_version" >> $GITHUB_OUTPUT
+
+      - name: Exit if no new commits since last release
+        id: has_changes
+        run: |
+          if [ -n "${{ steps.version.outputs.latest_tag }}" ]; then
+            commit_count=$(git rev-list --count "${{ steps.version.outputs.latest_tag }}"..HEAD)
+          else
+            commit_count=$(git rev-list --count HEAD)
+          fi
+          echo "commit_count=$commit_count" >> $GITHUB_OUTPUT
+          if [ "$commit_count" -eq 0 ]; then
+            echo "No commits since last release. Exiting without release."
+            exit 0
+          fi
+
+      - name: Build release notes
+        id: notes
+        run: |
+          if [ -n "${{ steps.version.outputs.latest_tag }}" ]; then
+            git log --pretty=format:'- %s' "${{ steps.version.outputs.latest_tag }}"..HEAD > release-notes.txt
+          else
+            git log --pretty=format:'- %s' HEAD > release-notes.txt
+          fi
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          cat release-notes.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Update CHANGELOG.md
+        run: |
+          release_date=$(date +'%d/%m/%y')
+          {
+            echo "# Changelog"
+            echo
+            echo "## [${{ steps.version.outputs.version }}] $release_date"
+            echo
+            cat release-notes.txt
+            echo
+          } > CHANGELOG.new
+          tail -n +2 CHANGELOG.md >> CHANGELOG.new
+          mv CHANGELOG.new CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "chore(release): ${{ steps.version.outputs.version }} [skip ci]"
+
+      - name: Create release tag and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GIT_AUTHOR_NAME: ${{ github.event.pusher.name }}
-          GIT_AUTHOR_EMAIL: ${{ github.event.pusher.email }}
         run: |
-          npx semantic-release
+          git tag "XIV_Databar-${{ steps.version.outputs.version }}"
+          git push origin HEAD --follow-tags

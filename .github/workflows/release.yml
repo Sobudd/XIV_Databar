@@ -78,18 +78,10 @@ jobs:
       - name: Update CHANGELOG.md
         run: |
           release_date=$(date +'%d/%m/%y')
-          {
-            echo "# Changelog"
-            echo
-            echo "## [${{ steps.version.outputs.version }}] $release_date"
-            echo
-            cat release-notes.txt
-            echo
-          } > CHANGELOG.new
-          tail -n +2 CHANGELOG.md >> CHANGELOG.new
-          mv CHANGELOG.new CHANGELOG.md
+          version="${{ steps.version.outputs.version }}"
+          python3 scripts/update_changelog.py "$version" "$release_date"
           git add CHANGELOG.md
-          git commit -m "chore(release): ${{ steps.version.outputs.version }} [skip ci]"
+          git commit -m "chore(release): $version [skip ci]"
 
       - name: Create release tag and push
         env:

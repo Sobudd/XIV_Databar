@@ -394,8 +394,11 @@ end
 function XIVBar:ResetUI()
 	if topOffsetBlizz then
 		UIParent_UpdateTopFramePositions = topOffsetBlizz
+		topOffsetBlizz = nil
 	end
-	UIParent_UpdateTopFramePositions();
+	if UIParent_UpdateTopFramePositions then
+		UIParent_UpdateTopFramePositions()
+	end
 end
 
 function XIVBar:GetGeneralOptions()

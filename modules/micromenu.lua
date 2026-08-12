@@ -233,6 +233,7 @@ function MenuModule:CreateFrames()
     self.frames.guild = CreateFrame("BUTTON", "guild", parentFrame)
     parentFrame = self.frames.guild
     self.text.guild = self.frames.guild:CreateFontString(nil, 'OVERLAY')
+    self.text.guild:SetFont(xb:GetFont(xb.db.profile.text.smallFontSize))
     self.bgTexture.guild = self.frames.guild:CreateTexture(nil, "OVERLAY")
   else
     if self.frames.guild then
@@ -246,6 +247,7 @@ function MenuModule:CreateFrames()
     self.frames.social = CreateFrame("BUTTON", "social", parentFrame)
     parentFrame = self.frames.social
     self.text.social = self.frames.social:CreateFontString(nil, 'OVERLAY')
+    self.text.social:SetFont(xb:GetFont(xb.db.profile.text.smallFontSize))
     self.bgTexture.social = self.frames.social:CreateTexture(nil, "OVERLAY")
   else
     if self.frames.social then

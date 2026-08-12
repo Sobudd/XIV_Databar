@@ -1,3 +1,6 @@
+## [3.2.6] 12/08/26
+Fixed 12.1 LUA error
+
 ## [3.2.5] 01/03/26
 Removed the port options in favour of the personal key to the Arcantina toy.
 

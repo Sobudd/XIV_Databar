@@ -6,6 +6,10 @@ on:
     types: [completed]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   package:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
@@ -149,11 +153,13 @@ jobs:
             exit 0
           }
           $tag = "XIV_Databar-$version"
-          if (git rev-parse --verify --quiet "refs/tags/$tag") {
+          & git rev-parse --verify --quiet "refs/tags/$tag" > $null 2>&1
+          if ($LASTEXITCODE -eq 0) {
             Add-Content -Path $env:GITHUB_OUTPUT -Value "skip=true"
           } else {
             Add-Content -Path $env:GITHUB_OUTPUT -Value "skip=false"
           }
+          exit 0
 
       - name: Create GitHub Release
         id: create_release

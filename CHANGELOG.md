@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.2.7] 12/08/26
+
+- Remove unnecessary output handling for release notes in workflow
+- Add version checking and changelog update to release workflow
+- Remove releaseRules from commit analyzer configuration
+- Enhance commit analyzer configuration with parser options for header pattern and correspondence
+- Update commit analyzer preset to use angular style
+- Add conventional-changelog-conventionalcommits to release workflow and package.json
+- Re-fixed changelog and release workflow to properly handle versioning and release notes.
+- Merge branch 'main' of https://github.com/Sobudd/XIV_Databar
+- Fixed release files and changelog
+- Release 1.0.0 - Aug 12, 2026, 7:29 AM
+- Clean up CHANGELOG by removing version 1.0.0
+- Release 1.0.0 - Aug 12, 2026, 7:25 AM
+
 ## [3.2.6] 12/08/26
 Fixed 12.1 LUA error
 
